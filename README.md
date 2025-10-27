@@ -14,8 +14,12 @@ This tutorial covers:
 ## Prerequisites
 
 - n8n installed (local or cloud)
-- OpenAI API key (or compatible LLM provider)
+- **LLM API Key** - Choose one:
+  - **Google Gemini API** (Recommended - FREE tier available!) - [Get key](https://aistudio.google.com/app/apikey)
+  - **OpenAI API** (Paid) - [Get key](https://platform.openai.com/api-keys)
 - Basic understanding of n8n workflows
+
+> **💡 Using Free Google Account?** This tutorial now supports **Google Gemini API** with a generous free tier! See [docs/setup.md](docs/setup.md) for setup instructions.
 
 ## Project Structure
 
@@ -55,13 +59,17 @@ ai-agent101/
    ```
 
 2. **Configure Credentials**
-   - Add your OpenAI API key in n8n credentials
+   - **Option A (FREE)**: Add your Google Gemini API key in n8n credentials
+   - **Option B (Paid)**: Add your OpenAI API key in n8n credentials
    - Set up any additional services needed
 
 3. **Import Workflows**
    - Navigate to each tutorial folder
    - Import the `workflow.json` file into n8n
+   - **If using Gemini**: Update LLM nodes after import ([see how](docs/workflow-compatibility.md))
    - Follow the README in each folder
+
+> **⚠️ Note**: Workflows are pre-configured for OpenAI. Gemini users need to swap LLM nodes (takes < 1 min). See [Workflow Compatibility Guide](docs/workflow-compatibility.md).
 
 ## Tutorial Progression
 
@@ -144,6 +152,7 @@ Basic Agent → API Integration → Memory → MCP → Orchestration
 
 - [n8n Documentation](https://docs.n8n.io/)
 - [n8n Community](https://community.n8n.io/)
+- [Google Gemini API Documentation](https://ai.google.dev/docs)
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 

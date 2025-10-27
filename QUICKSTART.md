@@ -5,7 +5,11 @@ Get up and running with n8n AI agents in 10 minutes!
 ## Prerequisites
 
 - Node.js 18+ installed
-- OpenAI API key ([get one here](https://platform.openai.com/api-keys))
+- **LLM API Key** - Choose one:
+  - **Google Gemini API** (FREE!) - [Get key here](https://aistudio.google.com/app/apikey)
+  - **OpenAI API** (Paid) - [Get key here](https://platform.openai.com/api-keys)
+
+> **💰 Save Money!** Google Gemini offers a generous **FREE tier** - perfect for learning!
 
 ## Step 1: Install n8n (2 minutes)
 
@@ -20,7 +24,19 @@ n8n
 
 n8n will start at http://localhost:5678
 
-## Step 2: Configure OpenAI (2 minutes)
+## Step 2: Configure LLM API (2 minutes)
+
+### Option A: Google Gemini (FREE - Recommended)
+
+1. Open http://localhost:5678
+2. Create your account (local only)
+3. Go to **Settings** → **Credentials**
+4. Click **Add Credential**
+5. Search for and select **Google Gemini API**
+6. Paste your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+7. Click **Save**
+
+### Option B: OpenAI (Paid)
 
 1. Open http://localhost:5678
 2. Create your account (local only)
