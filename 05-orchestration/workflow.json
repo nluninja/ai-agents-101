@@ -1,0 +1,450 @@
+{
+  "name": "05 - Multi-Agent Orchestration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "orchestration",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-orchestration",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst message = body.message;\n\nif (!message) {\n  throw new Error('Message is required');\n}\n\nreturn [{\n  json: {\n    userRequest: message,\n    executionId: `exec-${Date.now()}`,\n    startTime: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "extract-request",
+      "name": "Extract Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7
+        },
+        "text": "={{ $json.userRequest }}",
+        "systemMessage": "You are an orchestrator agent managing a team of specialized AI agents:\n\n1. **Research Agent** - Gathers information, data, and facts\n2. **Writer Agent** - Creates content, documentation, and articles\n3. **Reviewer Agent** - Reviews content for quality and accuracy\n\nYour role:\n- Analyze user requests\n- Break down complex tasks into steps\n- Assign steps to appropriate agents\n- Create an execution plan\n\nRespond with a JSON execution plan:\n\n{\n  \"plan\": [\n    {\n      \"step\": 1,\n      \"agent\": \"research\",\n      \"task\": \"Specific task description\",\n      \"requirements\": [\"requirement1\", \"requirement2\"]\n    }\n  ],\n  \"reasoning\": \"Why this plan makes sense\"\n}\n\nAvailable agents:\n- research: Use for gathering information, facts, data\n- writer: Use for creating content, articles, documentation\n- reviewer: Use for quality checking, editing, improvements"
+      },
+      "id": "orchestrator",
+      "name": "Orchestrator Agent",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [680, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse orchestrator's execution plan\nconst orchestratorResponse = $input.first().json.message;\nconst requestData = $('Extract Request').first().json;\n\ntry {\n  // Extract JSON from response\n  const jsonMatch = orchestratorResponse.match(/\\{[\\s\\S]*\\}/);\n  if (!jsonMatch) {\n    throw new Error('No execution plan found in orchestrator response');\n  }\n  \n  const executionPlan = JSON.parse(jsonMatch[0]);\n  \n  return [{\n    json: {\n      plan: executionPlan.plan,\n      reasoning: executionPlan.reasoning,\n      userRequest: requestData.userRequest,\n      executionId: requestData.executionId,\n      currentStep: 0,\n      results: [],\n      context: {}\n    }\n  }];\n} catch (error) {\n  throw new Error(`Failed to parse execution plan: ${error.message}`);\n}"
+      },
+      "id": "parse-plan",
+      "name": "Parse Execution Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "loop-start",
+      "name": "Loop Over Steps",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get current execution state\nconst state = $input.first().json;\nconst currentStepIndex = state.currentStep || 0;\nconst currentStepData = state.plan[currentStepIndex];\n\nif (!currentStepData) {\n  return [{ json: { complete: true, ...state } }];\n}\n\n// Prepare context for agent\nconst previousResults = state.results.map(r => ({\n  agent: r.agent,\n  output: r.output\n}));\n\nreturn [{\n  json: {\n    ...state,\n    currentStepData,\n    agentType: currentStepData.agent,\n    task: currentStepData.task,\n    requirements: currentStepData.requirements,\n    previousResults,\n    stepNumber: currentStepIndex + 1\n  }\n}];"
+      },
+      "id": "prepare-step",
+      "name": "Prepare Current Step",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.agentType }}",
+              "operation": "equals",
+              "value2": "research"
+            }
+          ]
+        }
+      },
+      "id": "route-agent",
+      "name": "Route to Agent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7
+        },
+        "text": "Task: {{ $json.task }}\n\nRequirements: {{ $json.requirements }}\n\nUser Request: {{ $json.userRequest }}",
+        "systemMessage": "You are a research agent specialized in gathering and synthesizing information.\n\nCapabilities:\n- Research topics thoroughly\n- Find relevant facts and data\n- Identify key insights\n- Organize information clearly\n- Cite sources when possible\n\nProvide comprehensive research findings in a well-structured format."
+      },
+      "id": "research-agent",
+      "name": "Research Agent",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [1800, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.8
+        },
+        "text": "Task: {{ $json.task }}\n\nRequirements: {{ $json.requirements }}\n\nPrevious Research:\n{{ JSON.stringify($json.previousResults) }}",
+        "systemMessage": "You are a professional content writer specialized in creating engaging, well-structured content.\n\nCapabilities:\n- Write clear, engaging content\n- Adapt tone and style to audience\n- Structure information effectively\n- Use research findings appropriately\n- Create compelling narratives\n\nCreate high-quality content based on the research provided."
+      },
+      "id": "writer-agent",
+      "name": "Writer Agent",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [1800, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.3
+        },
+        "text": "Task: {{ $json.task }}\n\nRequirements: {{ $json.requirements }}\n\nContent to Review:\n{{ JSON.stringify($json.previousResults) }}",
+        "systemMessage": "You are a content reviewer and editor specialized in quality assurance.\n\nCapabilities:\n- Assess content quality and accuracy\n- Check for coherence and clarity\n- Identify improvements\n- Ensure requirements are met\n- Polish and refine content\n\nReview Criteria:\n- Accuracy of information\n- Clarity and readability\n- Completeness\n- Grammar and style\n- Requirements compliance\n\nProvide the improved, polished version of the content."
+      },
+      "id": "reviewer-agent",
+      "name": "Reviewer Agent",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [1800, 600],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "merge-agents",
+      "name": "Merge Agent Outputs",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [2020, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store agent result and prepare for next step\nconst stepData = $('Prepare Current Step').first().json;\nconst agentOutput = $input.first().json.message;\n\n// Add result to history\nstepData.results.push({\n  step: stepData.stepNumber,\n  agent: stepData.agentType,\n  task: stepData.task,\n  output: agentOutput,\n  timestamp: new Date().toISOString()\n});\n\n// Move to next step\nstepData.currentStep = stepData.currentStep + 1;\n\n// Remove temporary fields\ndelete stepData.currentStepData;\ndelete stepData.agentType;\ndelete stepData.task;\ndelete stepData.requirements;\ndelete stepData.previousResults;\ndelete stepData.stepNumber;\n\nreturn [{ json: stepData }];"
+      },
+      "id": "store-result",
+      "name": "Store Result & Continue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2240, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if all steps are complete\nconst state = $input.first().json;\n\nif (state.currentStep >= state.plan.length) {\n  // Execution complete\n  const finalResult = state.results[state.results.length - 1];\n  \n  return [{\n    json: {\n      complete: true,\n      success: true,\n      output: finalResult.output,\n      executionId: state.executionId,\n      metadata: {\n        totalSteps: state.results.length,\n        agents: state.results.map(r => r.agent),\n        startTime: $('Extract Request').first().json.startTime,\n        endTime: new Date().toISOString()\n      },\n      trace: state.results\n    }\n  }];\n}\n\n// More steps to execute\nreturn [{ json: state }];"
+      },
+      "id": "check-complete",
+      "name": "Check Completion",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2460, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.complete }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "is-complete",
+      "name": "Is Complete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2680, 400]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "output",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "execution-id",
+              "name": "executionId",
+              "value": "={{ $json.executionId }}",
+              "type": "string"
+            },
+            {
+              "id": "metadata",
+              "name": "metadata",
+              "value": "={{ $json.metadata }}",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Final Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [2900, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [3120, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Request": {
+      "main": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Orchestrator Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Execution Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Execution Plan": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Steps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Steps": {
+      "main": [
+        [
+          {
+            "node": "Prepare Current Step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Current Step": {
+      "main": [
+        [
+          {
+            "node": "Route to Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route to Agent": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Writer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reviewer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent Outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Writer Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent Outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reviewer Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent Outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent Outputs": {
+      "main": [
+        [
+          {
+            "node": "Store Result & Continue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Result & Continue": {
+      "main": [
+        [
+          {
+            "node": "Check Completion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Completion": {
+      "main": [
+        [
+          {
+            "node": "Is Complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Complete?": {
+      "main": [
+        [
+          {
+            "node": "Format Final Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Steps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Final Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-01-27T12:00:00.000Z",
+  "versionId": "1"
+}
