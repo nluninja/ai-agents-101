@@ -1,0 +1,259 @@
+{
+  "name": "03 - Memory Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "memory-agent",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-memory",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract session ID and message from webhook\nconst body = $input.first().json.body;\nconst sessionId = body.sessionId || 'default-session';\nconst message = body.message;\n\nif (!message) {\n  throw new Error('Message is required');\n}\n\nreturn [{\n  json: {\n    sessionId,\n    message\n  }\n}];"
+      },
+      "id": "extract-session",
+      "name": "Extract Session Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "=memory:{{ $json.sessionId }}"
+      },
+      "id": "load-memory-redis",
+      "name": "Load Memory (Redis)",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": {
+        "redis": {
+          "id": "redis-credentials",
+          "name": "Redis"
+        }
+      },
+      "continueOnFail": true,
+      "notes": "If Redis not available, configure in-memory storage instead"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format context with conversation history\nconst sessionData = $('Extract Session Data').first().json;\nconst memoryData = $input.first().json;\n\n// Parse stored memory or start fresh\nlet history = [];\ntry {\n  if (memoryData.value) {\n    history = JSON.parse(memoryData.value);\n  }\n} catch (e) {\n  console.log('Starting new conversation');\n}\n\n// Add current user message\nhistory.push({\n  role: 'user',\n  content: sessionData.message\n});\n\nreturn [{\n  json: {\n    sessionId: sessionData.sessionId,\n    messages: history,\n    currentMessage: sessionData.message\n  }\n}];"
+      },
+      "id": "format-context",
+      "name": "Format Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7
+        },
+        "messages": {
+          "messageValues": "={{ $json.messages }}"
+        },
+        "systemMessage": "You are a helpful AI assistant with memory of past conversations. Use the conversation history to provide contextual and personalized responses.\n\nRemember details users share about themselves and reference them naturally when relevant. If a user asks about something they mentioned before, recall it from the conversation history.\n\nBe friendly, helpful, and show that you're paying attention to the conversation context."
+      },
+      "id": "agent-with-memory",
+      "name": "AI Agent with Memory",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare memory for storage\nconst context = $('Format Context').first().json;\nconst agentResponse = $input.first().json.message;\n\n// Add assistant response to history\nconst updatedHistory = context.messages;\nupdatedHistory.push({\n  role: 'assistant',\n  content: agentResponse\n});\n\n// Implement sliding window - keep last 20 messages\nconst trimmedHistory = updatedHistory.slice(-20);\n\nreturn [{\n  json: {\n    sessionId: context.sessionId,\n    key: `memory:${context.sessionId}`,\n    value: JSON.stringify(trimmedHistory),\n    response: agentResponse\n  }\n}];"
+      },
+      "id": "prepare-memory",
+      "name": "Prepare Memory Storage",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $json.key }}",
+        "value": "={{ $json.value }}",
+        "expire": true,
+        "ttl": 3600,
+        "options": {}
+      },
+      "id": "save-memory-redis",
+      "name": "Save Memory (Redis)",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [1560, 300],
+      "credentials": {
+        "redis": {
+          "id": "redis-credentials",
+          "name": "Redis"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": "true",
+              "type": "boolean"
+            },
+            {
+              "id": "response",
+              "name": "response",
+              "value": "={{ $('Prepare Memory Storage').first().json.response }}",
+              "type": "string"
+            },
+            {
+              "id": "session-id",
+              "name": "sessionId",
+              "value": "={{ $('Prepare Memory Storage').first().json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2000, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Session Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Session Data": {
+      "main": [
+        [
+          {
+            "node": "Load Memory (Redis)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Memory (Redis)": {
+      "main": [
+        [
+          {
+            "node": "Format Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Context": {
+      "main": [
+        [
+          {
+            "node": "AI Agent with Memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent with Memory": {
+      "main": [
+        [
+          {
+            "node": "Prepare Memory Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Memory Storage": {
+      "main": [
+        [
+          {
+            "node": "Save Memory (Redis)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Memory (Redis)": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-01-27T12:00:00.000Z",
+  "versionId": "1"
+}
