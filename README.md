@@ -17,7 +17,9 @@ This tutorial covers:
 - **LLM API Key** - Choose one:
   - **Google Gemini API** (Recommended - FREE tier available!) - [Get key](https://aistudio.google.com/app/apikey)
   - **OpenAI API** (Paid) - [Get key](https://platform.openai.com/api-keys)
-- Basic understanding of n8n workflows
+- Basic understanding of n8n workflows (see [n8n basics guide](docs/n8n-basics.md))
+
+> **💡 New to n8n?** Check the [n8n Basics Guide](docs/n8n-basics.md) - we only assume you can click, drag, and copy/paste!
 
 > **💡 Using Free Google Account?** This tutorial now supports **Google Gemini API** with a generous free tier! See [docs/setup.md](docs/setup.md) for setup instructions.
 
