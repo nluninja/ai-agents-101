@@ -68,10 +68,11 @@ ai-agent101/
 3. **Import Workflows**
    - Navigate to each tutorial folder
    - Import the `workflow.json` file into n8n
-   - **If using Gemini**: Update LLM nodes after import ([see how](docs/workflow-compatibility.md))
+   - **Workflows come with Google Gemini pre-configured!** Just add your credential.
    - Follow the README in each folder
 
-> **⚠️ Note**: Workflows are pre-configured for OpenAI. Gemini users need to swap LLM nodes (takes < 1 min). See [Workflow Compatibility Guide](docs/workflow-compatibility.md).
+> **✅ Ready to Use**: All workflows are pre-configured with FREE Google Gemini! Just import and add your API key.
+> **💡 Want OpenAI?** See the note at the bottom of each tutorial README for OpenAI alternative.
 
 ## Tutorial Progression
 

@@ -55,7 +55,7 @@
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
+        "model": "gpt-4o-mini",
         "options": {
           "temperature": 0.7
         },
@@ -66,13 +66,13 @@
       },
       "id": "agent-with-memory",
       "name": "AI Agent with Memory",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [1120, 300],
       "credentials": {
-        "googleGeminiApi": {
-          "id": "gemini-credentials",
-          "name": "Google Gemini API"
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
         }
       }
     },

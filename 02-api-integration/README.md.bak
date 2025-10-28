@@ -51,7 +51,7 @@ Agent (with Tools)
 
 ### 3. Configure Credentials
 
-**Google Gemini**:
+**OpenAI**:
 - Set up as in previous tutorial
 
 **HTTP Request** (for Weather API):

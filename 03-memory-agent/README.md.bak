@@ -142,7 +142,7 @@ Use n8n's database nodes for persistent storage.
 
 1. Import `workflow.json`
 2. Choose memory backend (in-memory or Redis)
-3. Update Gemini credentials
+3. Update OpenAI credentials
 
 ## Workflow Breakdown
 

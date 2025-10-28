@@ -1,5 +1,5 @@
 {
-  "name": "01 - Basic Agent",
+  "name": "01 - Basic Agent (Gemini)",
   "nodes": [
     {
       "parameters": {
@@ -37,28 +37,22 @@
     },
     {
       "parameters": {
-        "model": "gpt-4o-mini",
+        "model": "gemini-1.5-flash",
         "options": {
           "temperature": 0.7
         },
-        "messages": {
-          "messageValues": [
-            {
-              "message": "={{ $json.userMessage }}"
-            }
-          ]
-        },
+        "text": "={{ $json.userMessage }}",
         "systemMessage": "You are a helpful AI assistant. Be concise, friendly, and informative. Answer questions clearly and provide practical advice when needed."
       },
-      "id": "openai-chat",
-      "name": "OpenAI Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "id": "gemini-chat",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [680, 300],
       "credentials": {
-        "openAiApi": {
-          "id": "openai-credentials",
-          "name": "OpenAI API"
+        "googleGeminiApi": {
+          "id": "gemini-credentials",
+          "name": "Google Gemini API"
         }
       }
     },
@@ -75,7 +69,7 @@
             {
               "id": "response-text",
               "name": "response",
-              "value": "={{ $json.message }}",
+              "value": "={{ $json.text }}",
               "type": "string"
             },
             {
@@ -122,14 +116,14 @@
       "main": [
         [
           {
-            "node": "OpenAI Chat Model",
+            "node": "Google Gemini Chat Model",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "OpenAI Chat Model": {
+    "Google Gemini Chat Model": {
       "main": [
         [
           {
@@ -157,8 +151,8 @@
     "executionOrder": "v1"
   },
   "staticData": null,
-  "tags": [],
+  "tags": ["tutorial", "gemini", "basic"],
   "triggerCount": 1,
-  "updatedAt": "2024-01-27T12:00:00.000Z",
+  "updatedAt": "2025-10-28T12:00:00.000Z",
   "versionId": "1"
 }

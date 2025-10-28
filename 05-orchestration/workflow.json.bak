@@ -26,7 +26,7 @@
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
+        "model": "gpt-4o-mini",
         "options": {
           "temperature": 0.7
         },
@@ -35,13 +35,13 @@
       },
       "id": "orchestrator",
       "name": "Orchestrator Agent",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [680, 400],
       "credentials": {
-        "googleGeminiApi": {
-          "id": "gemini-credentials",
-          "name": "Google Gemini API"
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
         }
       }
     },
@@ -95,7 +95,7 @@
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
+        "model": "gpt-4o-mini",
         "options": {
           "temperature": 0.7
         },
@@ -104,19 +104,19 @@
       },
       "id": "research-agent",
       "name": "Research Agent",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [1800, 200],
       "credentials": {
-        "googleGeminiApi": {
-          "id": "gemini-credentials",
-          "name": "Google Gemini API"
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
         }
       }
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
+        "model": "gpt-4o-mini",
         "options": {
           "temperature": 0.8
         },
@@ -125,19 +125,19 @@
       },
       "id": "writer-agent",
       "name": "Writer Agent",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [1800, 400],
       "credentials": {
-        "googleGeminiApi": {
-          "id": "gemini-credentials",
-          "name": "Google Gemini API"
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
         }
       }
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
+        "model": "gpt-4o-mini",
         "options": {
           "temperature": 0.3
         },
@@ -146,13 +146,13 @@
       },
       "id": "reviewer-agent",
       "name": "Reviewer Agent",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [1800, 600],
       "credentials": {
-        "googleGeminiApi": {
-          "id": "gemini-credentials",
-          "name": "Google Gemini API"
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
         }
       }
     },

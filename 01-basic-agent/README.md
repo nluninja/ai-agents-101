@@ -68,27 +68,22 @@ Before starting, you need a free API key:
 3. Select `workflow.json` from this folder
 4. The workflow will be imported
 
-### 4. Update the LLM Node (Important!)
+### 4. Configure the Gemini Node
 
-The workflow comes with an OpenAI node by default. Let's change it to Gemini:
+The workflow is already set up with Google Gemini! Just add your credential:
 
-1. **Delete the "OpenAI Chat Model" node** (click it and press Delete)
-2. Click **"+ Add Node"**
-3. Search for **"Google Gemini Chat Model"**
-4. Click to add it to the canvas
-5. **Connect the nodes** in this order:
-   ```
-   Webhook → Extract Message → Gemini → Format Response → Respond to Webhook
-   ```
-6. Click on the **Gemini node** to configure it:
-   - **Model**: Select `gemini-1.5-flash` (fast and free!)
-   - **Credential**: Select your Gemini credential
-   - **System Message**:
-     ```
-     You are a helpful AI assistant. Be concise, friendly, and informative.
-     Answer questions clearly and provide practical advice.
-     ```
-7. Click outside to save
+1. Click on the **"Google Gemini Chat Model"** node (it will have a red warning ⚠️)
+2. Click **"Credential to connect with"** dropdown
+3. Select your Gemini credential (the one you created in step 2)
+4. Click outside to save
+
+**That's it!** The workflow is ready to use. 🎉
+
+**The workflow already has:**
+- ✅ Model set to `gemini-1.5-flash` (FREE!)
+- ✅ Temperature set to 0.7 (balanced)
+- ✅ System message configured
+- ✅ All nodes connected properly
 
 ### 5. Test the Webhook
 
