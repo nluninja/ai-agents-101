@@ -32,7 +32,7 @@ Webhook Trigger
     ↓
 Extract Message
     ↓
-Google Gemini Chat Model (FREE!)
+Message a model (Gemini 2.0 Flash - FREE!)
     ↓
 Format Response
     ↓
@@ -65,14 +65,14 @@ Before starting, you need a free API key:
 
 1. In n8n, click **"+ Add workflow"**
 2. Click **"⋯"** (three dots) → **"Import from File"**
-3. Select `workflow.json` from this folder
+3. Select `worflow.json.json` from this folder (note: there's a typo in the filename - it should be `workflow.json`)
 4. The workflow will be imported
 
 ### 4. Configure the Gemini Node
 
 The workflow is already set up with Google Gemini! Just add your credential:
 
-1. Click on the **"Google Gemini Chat Model"** node (it will have a red warning ⚠️)
+1. Click on the **"Message a model"** node (it will have a red warning ⚠️)
 2. Click **"Credential to connect with"** dropdown
 3. Select your Gemini credential (the one you created in step 2)
 4. Click outside to save
@@ -80,8 +80,7 @@ The workflow is already set up with Google Gemini! Just add your credential:
 **That's it!** The workflow is ready to use. 🎉
 
 **The workflow already has:**
-- ✅ Model set to `gemini-1.5-flash` (FREE!)
-- ✅ Temperature set to 0.7 (balanced)
+- ✅ Model set to `gemini-2.0-flash` (FREE! Latest model)
 - ✅ System message configured
 - ✅ All nodes connected properly
 
@@ -137,22 +136,24 @@ Extracts the `message` field from the webhook body:
 {{ $json.body.message }}
 ```
 
-### Node 3: Google Gemini Chat Model
+### Node 3: Message a model
 - **Type**: AI (LLM)
-- **Model**: `gemini-1.5-flash` (FREE!)
-- **Temperature**: 0.7
-- **System Message**:
-  ```
-  You are a helpful AI assistant. Be concise, friendly, and informative.
-  Answer questions clearly and provide practical advice.
-  ```
+- **Model**: `gemini-2.0-flash` (FREE! Latest Gemini model)
+- **Messages**:
+  - User message: `{{ $json.body.message }}`
+  - System message:
+    ```
+    You are a helpful AI assistant. Provide clear, concise, and friendly
+    responses to user queries. If you're unsure about something,
+    acknowledge it honestly.
+    ```
 
-Processes the user message with Google's free Gemini AI and generates a response.
+Processes the user message with Google's free Gemini 2.0 Flash AI and generates a response.
 
-**Why Gemini Flash?**
+**Why Gemini 2.0 Flash?**
 - ✅ Completely FREE
-- ✅ Fast responses
-- ✅ Good quality (comparable to GPT-3.5)
+- ✅ Ultra-fast responses (newest model)
+- ✅ Excellent quality (better than GPT-3.5)
 - ✅ 1,500 requests/day free tier
 
 ### Node 4: Format Response
@@ -266,8 +267,9 @@ Add an "IF" node after Extract Message:
 
 | Model | Best For | Speed | Quality |
 |-------|----------|-------|---------|
-| `gemini-1.5-flash` | General use, learning | ⚡ Fast | Good |
-| `gemini-1.5-pro` | Complex reasoning | Medium | Excellent |
+| `gemini-2.0-flash` | General use, learning (newest!) | ⚡⚡ Ultra Fast | Excellent |
+| `gemini-1.5-flash` | General use, stable | ⚡ Fast | Very Good |
+| `gemini-1.5-pro` | Complex reasoning | Medium | Outstanding |
 
 ### Add Logging
 Insert a "Code" node to log requests:
@@ -295,8 +297,9 @@ return $input.all();
 - ✅ Check usage at Google AI Studio
 
 **"Model Not Found"**
-- ✅ Use `gemini-1.5-flash` or `gemini-1.5-pro`
+- ✅ Use `gemini-2.0-flash`, `gemini-1.5-flash`, or `gemini-1.5-pro`
 - ✅ Check spelling of model name
+- ✅ Note: Some older n8n versions may not support gemini-2.0-flash yet
 
 ### Webhook Issues
 
