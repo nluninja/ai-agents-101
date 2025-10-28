@@ -1,10 +1,10 @@
 # 🎯 START HERE: Gemini Users Guide
 
-**Using a free Google account? You're in the right place!**
+**Using a free Google account? Perfect! This tutorial is 100% Gemini-native!**
 
 ## Will Everything Run Smoothly? ✅ YES!
 
-This tutorial **fully supports Google Gemini**, but there's one small step you need to know about.
+All workflows are **pre-configured with Google Gemini**. No node swapping needed!
 
 ## The 1-Minute Setup
 
@@ -26,53 +26,40 @@ This tutorial **fully supports Google Gemini**, but there's one small step you n
 
 Done! ✅
 
-## Important: About the Workflows
+## How the Workflows Work
 
-### ⚠️ One Small Adjustment Needed
+### ✅ Pre-Configured for Gemini
 
-The workflow JSON files in this repo are **pre-configured for OpenAI** (to work for everyone).
+All workflow JSON files are **ready to use with Gemini**:
+
+- ✅ All LLM nodes use **Google Gemini Chat Model**
+- ✅ Models are set to `gemini-1.5-flash` or `gemini-1.5-pro`
+- ✅ No node swapping required!
 
 **What this means for you:**
-After importing a workflow, you need to **swap the LLM node** (takes 30 seconds).
+1. Import the workflow
+2. Add your Gemini credential
+3. Start using it immediately!
 
-### How to Swap the Node
+## Quick Start
 
-1. Import the workflow as normal
-2. Click on the "OpenAI Chat Model" node
-3. Delete it
-4. Add a new "Google Gemini Chat Model" node
-5. Copy/paste the system prompt
-6. Set model to `gemini-1.5-flash`
-7. Connect it the same way
+### Tutorial 01 Example:
 
-**That's it!** Now it uses Gemini (and it's FREE!).
+1. Import `01-basic-agent/workflow.json`
+2. Click on "Google Gemini Chat Model" node (red ⚠️)
+3. Select your Gemini credential from dropdown
+4. Click "Execute Workflow"
 
-## Quick Example
-
-### What You'll See (OpenAI node):
-```
-Node: OpenAI Chat Model
-Model: gpt-4o-mini
-Temperature: 0.7
-System Message: "You are a helpful assistant..."
-```
-
-### What You Need (Gemini node):
-```
-Node: Google Gemini Chat Model
-Model: gemini-1.5-flash
-Temperature: 0.7
-System Message: "You are a helpful assistant..."  (same!)
-```
+**That's it!** 🎉
 
 ## Will Everything Work?
 
-### ✅ Yes, Everything Works:
+### ✅ Yes, Everything Works Perfectly:
 
-- All 5 tutorials work perfectly with Gemini
+- All 5 tutorials are Gemini-native
 - All code examples work
 - All concepts apply
-- Memory, tools, orchestration - all supported
+- Memory, tools, orchestration - all fully supported
 
 ### 🎁 Bonus Benefits:
 
@@ -86,29 +73,29 @@ System Message: "You are a helpful assistant..."  (same!)
 
 ### For Absolute Smoothest Experience:
 
-1. **Follow the Quick Start**
-   - [QUICKSTART.md](QUICKSTART.md) has Gemini instructions
+1. **Install n8n**
+   - See [docs/n8n-installation.md](docs/n8n-installation.md)
 
-2. **Read the Gemini Guide**
-   - [docs/gemini-guide.md](docs/gemini-guide.md) - Everything about Gemini
+2. **Get Gemini API Key**
+   - [Get key](https://aistudio.google.com/app/apikey)
 
-3. **Check Compatibility Notes**
-   - [docs/workflow-compatibility.md](docs/workflow-compatibility.md) - Technical details
+3. **Read Setup Guide**
+   - [docs/setup.md](docs/setup.md) - Configuration details
 
 4. **Start Tutorial 01**
    - [01-basic-agent](01-basic-agent/README.md) - Build your first agent!
 
 ## What Models to Use?
 
-| Tutorial | Recommended Model | Why |
-|----------|------------------|-----|
+| Tutorial | Pre-Configured Model | Why |
+|----------|---------------------|-----|
 | 01-basic-agent | `gemini-1.5-flash` | Fast, perfect for learning |
-| 02-api-integration | `gemini-1.5-flash` | Good enough for tools |
+| 02-api-integration | `gemini-1.5-flash` | Good for tools |
 | 03-memory-agent | `gemini-1.5-flash` | Handles context well |
-| 04-mcp-agent | `gemini-1.5-pro` | Better for complex tools |
-| 05-orchestration | `gemini-1.5-pro` | Multi-agent needs reasoning |
+| 04-mcp-agent | `gemini-1.5-flash` | Good for MCP tools |
+| 05-orchestration | `gemini-1.5-pro` | Multi-agent reasoning |
 
-**Start with `gemini-1.5-flash` for everything** - it's free and powerful!
+**All workflows come with optimal models pre-selected!**
 
 ## Rate Limits (Free Tier)
 
@@ -119,7 +106,7 @@ You get:
 
 **More than enough for learning!**
 
-If you hit limits, just add a 4-second delay between requests:
+If you hit limits, add a 4-second delay between requests:
 ```javascript
 await new Promise(r => setTimeout(r, 4000));
 ```
@@ -142,7 +129,7 @@ npm install -g n8n@latest
 
 ### "Rate limit exceeded"
 
-**Solution:** Add delays between requests (see [gemini-guide.md](docs/gemini-guide.md))
+**Solution:** Add delays between requests or upgrade to paid tier
 
 ## Cost Comparison
 
@@ -151,17 +138,15 @@ npm install -g n8n@latest
 | Provider | Cost |
 |----------|------|
 | **Google Gemini** | **$0** 🎉 |
-| OpenAI GPT-4o-mini | ~$1-2 |
-| OpenAI GPT-4o | ~$5-10 |
 
-**Gemini is FREE for this entire course!**
+**Gemini is 100% FREE for this entire course!**
 
 ## Need More Help?
 
 ### Documentation:
-1. **[Gemini Guide](docs/gemini-guide.md)** - Detailed Gemini docs
-2. **[Setup Guide](docs/setup.md)** - Full setup instructions
-3. **[Compatibility Guide](docs/workflow-compatibility.md)** - Technical details
+1. **[n8n Installation](docs/n8n-installation.md)** - Install n8n
+2. **[Setup Guide](docs/setup.md)** - Configure credentials
+3. **[Gemini Guide](docs/gemini-guide.md)** - Detailed Gemini info
 4. **[Troubleshooting](docs/troubleshooting.md)** - Fix common issues
 
 ### External Resources:
@@ -179,22 +164,20 @@ npm install -g n8n@latest
 
 1. ✅ Get FREE Gemini API key (30 seconds)
 2. ✅ Add to n8n (30 seconds)
-3. ✅ Import workflows normally
-4. ⚠️ Swap OpenAI node → Gemini node (30 seconds per workflow)
+3. ✅ Import workflows (already Gemini-native!)
+4. ✅ Add credential (10 seconds)
 5. ✅ Everything works perfectly!
 
-**Total extra effort:** ~30 seconds per tutorial = 2.5 minutes total
+**Total effort:** ~1 minute per tutorial
 
 **Total cost:** $0 🎉
-
-**It's worth it!**
 
 ## Ready to Start?
 
 ### Your Next Steps:
 
 1. **Get API Key**: [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. **Install n8n**: [QUICKSTART.md](QUICKSTART.md)
+2. **Install n8n**: [docs/n8n-installation.md](docs/n8n-installation.md)
 3. **Configure**: [docs/setup.md](docs/setup.md)
 4. **Build First Agent**: [01-basic-agent](01-basic-agent/README.md)
 

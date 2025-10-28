@@ -56,12 +56,12 @@ docker run -it --rm --name n8n -p 5678:5678 n8nio/n8n
 
 ### AI/LLM Issues
 
-#### OpenAI API Errors
+#### Gemini API Errors
 
 **Error: Invalid API Key**
 ```
 Solution:
-1. Verify key at platform.openai.com
+1. Verify key at platform.gemini.com
 2. Re-enter in n8n credentials
 3. Check for trailing spaces
 ```
@@ -72,7 +72,7 @@ Solution:
 1. Add rate limiting to workflow
 2. Implement retry logic
 3. Use delay nodes between calls
-4. Consider upgrading OpenAI plan
+4. Consider upgrading Gemini plan
 ```
 
 **Error: Context Length Exceeded**
@@ -93,7 +93,7 @@ Solution:
 2. Use examples in prompt
 3. Increase temperature for creativity
 4. Decrease temperature for consistency
-5. Try different model (GPT-4 vs GPT-3.5)
+5. Try different model (Gemini Pro vs GPT-3.5)
 ```
 
 **Problem**: Inconsistent outputs

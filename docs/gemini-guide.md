@@ -13,7 +13,7 @@
    - 1 million tokens per minute
 
 2. **Powerful Models**
-   - Gemini 1.5 Pro - Comparable to GPT-4
+   - Gemini 1.5 Pro - Comparable to Gemini Pro
    - Gemini 1.5 Flash - Fast and efficient
    - Large context windows (up to 1M tokens)
 
@@ -25,7 +25,7 @@
 ### ⚠️ Limitations
 
 - Rate limits (15 RPM on free tier)
-- Some advanced features differ from OpenAI
+- Some advanced features differ from Gemini
 - Function calling format slightly different
 
 ## Getting Your API Key (1 minute)
@@ -71,10 +71,10 @@ When you import a workflow:
 
 When importing the tutorial workflows, you'll need to adjust LLM nodes:
 
-#### Before (OpenAI):
+#### Before (Gemini):
 ```
-Node: OpenAI Chat Model
-Model: gpt-4o-mini
+Node: Gemini Chat Model
+Model: gemini-1.5-flash
 ```
 
 #### After (Gemini):
@@ -92,11 +92,11 @@ Model: gemini-1.5-flash
 | Cost Optimization | `gemini-1.5-flash` | Best performance/cost |
 | Long Context | `gemini-1.5-pro` | Up to 1M token context |
 
-## Gemini vs OpenAI Differences
+## Gemini vs Gemini Differences
 
 ### API Response Format
 
-**OpenAI:**
+**Gemini:**
 ```json
 {
   "message": "AI response here"
@@ -114,7 +114,7 @@ Model: gemini-1.5-flash
 
 Both support function calling, but with slight syntax differences:
 
-**OpenAI:**
+**Gemini:**
 ```json
 {
   "name": "function_name",
@@ -134,7 +134,7 @@ Both support function calling, but with slight syntax differences:
 
 ### Temperature Ranges
 
-- **OpenAI**: 0.0 - 2.0
+- **Gemini**: 0.0 - 2.0
 - **Gemini**: 0.0 - 1.0
 
 ## Updating Tutorial Workflows
@@ -143,7 +143,7 @@ Both support function calling, but with slight syntax differences:
 
 **Change this node:**
 
-Find the "OpenAI Chat Model" node, replace with "Google Gemini Chat Model"
+Find the "Gemini Chat Model" node, replace with "Google Gemini Chat Model"
 
 **Update configuration:**
 ```
@@ -157,7 +157,7 @@ Max Tokens: 2048 (optional)
 ### Example: Memory Agent (03-memory-agent)
 
 **Same process:**
-1. Replace OpenAI nodes with Google Gemini nodes
+1. Replace Gemini nodes with Google Gemini nodes
 2. Update model name
 3. Adjust any response parsing if needed
 
@@ -220,12 +220,12 @@ for (let i = 0; i < 3; i++) {
 | Provider | Free Tier | After Free Tier |
 |----------|-----------|----------------|
 | **Google Gemini** | 1,500 req/day FREE | Pay-as-you-go (very cheap) |
-| **OpenAI** | $5 credit (expires) | ~$0.0001-0.06 per request |
+| **Gemini** | $5 credit (expires) | ~$0.0001-0.06 per request |
 
 **For 100 requests/day:**
 - Gemini: **$0/month** (within free tier)
-- OpenAI GPT-4o-mini: **~$3-5/month**
-- OpenAI GPT-4o: **~$15-30/month**
+- Gemini Gemini Proo-mini: **~$3-5/month**
+- Gemini Gemini Proo: **~$15-30/month**
 
 ## Upgrading to Paid (Optional)
 
@@ -239,7 +239,7 @@ If you exceed free limits, Gemini offers very competitive paid tiers:
 - Input: $1.25 per 1M tokens
 - Output: $5.00 per 1M tokens
 
-**Still cheaper than OpenAI's GPT-4!**
+**Still cheaper than Gemini's Gemini Pro!**
 
 ## Troubleshooting Gemini
 
@@ -271,17 +271,17 @@ If you exceed free limits, Gemini offers very competitive paid tiers:
 **Solution:**
 1. Ensure n8n version supports Gemini function calling
 2. Check function definition format
-3. Try OpenAI format first (often compatible)
+3. Try Gemini format first (often compatible)
 
 ## Example: Converting a Workflow
 
-### Original (OpenAI):
+### Original (Gemini):
 ```json
 {
   "name": "AI Agent",
   "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
   "parameters": {
-    "model": "gpt-4o-mini",
+    "model": "gemini-1.5-flash",
     "temperature": 0.7
   }
 }
@@ -350,8 +350,8 @@ A: No! A regular Google account is sufficient.
 **Q: What if I hit rate limits?**
 A: Add delays between requests or upgrade to paid tier.
 
-**Q: Is Gemini as good as GPT-4?**
-A: Gemini 1.5 Pro is very comparable to GPT-4 in most tasks.
+**Q: Is Gemini as good as Gemini Pro?**
+A: Gemini 1.5 Pro is very comparable to Gemini Pro in most tasks.
 
 ## Quick Reference
 

@@ -14,14 +14,12 @@ This tutorial covers:
 ## Prerequisites
 
 - n8n installed (local or cloud)
-- **LLM API Key** - Choose one:
-  - **Google Gemini API** (Recommended - FREE tier available!) - [Get key](https://aistudio.google.com/app/apikey)
-  - **OpenAI API** (Paid) - [Get key](https://platform.openai.com/api-keys)
+- **Google Gemini API key** (FREE tier available!) - [Get key](https://aistudio.google.com/app/apikey)
 - Basic understanding of n8n workflows (see [n8n basics guide](docs/n8n-basics.md))
 
 > **💡 New to n8n?** Check the [n8n Basics Guide](docs/n8n-basics.md) - we only assume you can click, drag, and copy/paste!
 
-> **💡 Using Free Google Account?** This tutorial now supports **Google Gemini API** with a generous free tier! See [docs/setup.md](docs/setup.md) for setup instructions.
+> **✅ 100% FREE**: All tutorials use Google Gemini API with a generous free tier! See [docs/setup.md](docs/setup.md) for setup instructions.
 
 ## Project Structure
 
@@ -61,9 +59,8 @@ ai-agent101/
    ```
 
 2. **Configure Credentials**
-   - **Option A (FREE)**: Add your Google Gemini API key in n8n credentials
-   - **Option B (Paid)**: Add your OpenAI API key in n8n credentials
-   - Set up any additional services needed
+   - Add your Google Gemini API key in n8n credentials
+   - Set up any additional services needed (Redis for Tutorial 03)
 
 3. **Import Workflows**
    - Navigate to each tutorial folder
@@ -72,7 +69,6 @@ ai-agent101/
    - Follow the README in each folder
 
 > **✅ Ready to Use**: All workflows are pre-configured with FREE Google Gemini! Just import and add your API key.
-> **💡 Want OpenAI?** See the note at the bottom of each tutorial README for OpenAI alternative.
 
 ## Tutorial Progression
 
@@ -156,7 +152,6 @@ Basic Agent → API Integration → Memory → MCP → Orchestration
 - [n8n Documentation](https://docs.n8n.io/)
 - [n8n Community](https://community.n8n.io/)
 - [Google Gemini API Documentation](https://ai.google.dev/docs)
-- [OpenAI API Documentation](https://platform.openai.com/docs)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ## Contributing

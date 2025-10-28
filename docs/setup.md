@@ -47,7 +47,7 @@ Choose one of the following options:
 - ✅ No credit card required
 - ✅ 60 requests/minute, 1,500/day
 - ✅ Works with any Google account
-- ✅ Powerful models (comparable to GPT-4)
+- ✅ Powerful models (comparable to Gemini Pro)
 
 **Get Your Free API Key:**
 1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
@@ -72,19 +72,19 @@ Choose one of the following options:
 - 1 million tokens per minute (TPM)
 - 1,500 requests per day (RPD)
 
-### Option B: OpenAI API (Paid)
+### Option B: Gemini API (Paid)
 
 **Note:** Requires payment setup and charges per token.
 
 1. Go to Settings → Credentials
 2. Click "Add Credential"
-3. Select "OpenAI API"
-4. Enter your API key from https://platform.openai.com/api-keys
+3. Select "Gemini API"
+4. Enter your API key from https://platform.gemini.com/api-keys
 5. Click "Save"
 
 **Available Models:**
-- `gpt-4o-mini` - Affordable, good performance
-- `gpt-4o` - Most capable
+- `gemini-1.5-flash` - Affordable, good performance
+- `gemini-1.5-pro` - Most capable
 - `gpt-3.5-turbo` - Fastest, cheapest
 
 ### Redis (for memory examples)
@@ -122,7 +122,7 @@ Create a `.env` file in your n8n directory:
 # Google Gemini (if using)
 GOOGLE_GEMINI_API_KEY=AI...
 
-# OpenAI (if using)
+# Gemini (if using)
 OPENAI_API_KEY=sk-...
 
 # n8n Settings

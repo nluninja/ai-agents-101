@@ -83,7 +83,7 @@ LLMs can request tool execution:
 ### Context Window
 - Limited memory the LLM can process
 - Typically measured in tokens
-- GPT-4: 8k-128k tokens
+- Gemini Pro: 8k-128k tokens
 - Important for conversation history
 
 ### Temperature
@@ -188,11 +188,11 @@ User asks about weather → Select weather tool
    - Verify response formats
 
 4. **Review Prompts**
-   - Test in OpenAI playground first
+   - Test in Gemini playground first
    - Iterate based on outputs
 
 ## Resources
 
 - [n8n AI Documentation](https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.ai-agent/)
-- [OpenAI Best Practices](https://platform.openai.com/docs/guides/prompt-engineering)
+- [Gemini Best Practices](https://platform.gemini.com/docs/guides/prompt-engineering)
 - [LangChain Concepts](https://python.langchain.com/docs/get_started/introduction)

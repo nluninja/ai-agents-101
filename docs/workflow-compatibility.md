@@ -2,123 +2,43 @@
 
 ## Important: Workflow JSON Files
 
-⚠️ **The workflow JSON files in this repository are currently configured for OpenAI by default.**
+✅ **The workflow JSON files in this repository are pre-configured for Google Gemini!**
 
-### Why?
+### What This Means
 
-The workflow JSON files include specific node types:
-- `@n8n/n8n-nodes-langchain.lmChatOpenAi` (OpenAI nodes)
+All workflow files include:
+- `@n8n/n8n-nodes-langchain.lmChatGoogleGemini` (Gemini nodes)
+- Models: `gemini-1.5-flash` or `gemini-1.5-pro`
+- Credentials: `googleGeminiApi`
 
-To use **Google Gemini**, you'll need to make a small adjustment after importing.
+**No modifications needed!** Just import and add your Gemini API credential.
 
-## How to Use Workflows with Gemini
+## Using Workflows with Gemini (Ready to Go!)
 
-### Option 1: Modify After Import (Easiest)
+### Quick Start (Recommended)
 
-1. **Import the workflow** as normal
-2. **Click on each LLM node** (usually called "OpenAI Chat Model" or similar)
-3. **Replace the node:**
-   - Delete the OpenAI node
-   - Add a new "Google Gemini Chat Model" node
-   - Copy the system prompt from the old node
-   - Connect it the same way
-4. **Configure:**
-   - Model: `gemini-1.5-flash`
-   - Temperature: Same as original (usually 0.7)
-   - System Message: Same as original
+1. **Import the workflow** into n8n
+2. **Click on the Google Gemini Chat Model node** (will have red ⚠️)
+3. **Select your credential** from the dropdown
+4. **Execute!**
 
-### Option 2: Edit JSON Before Import (Advanced)
+That's it! The workflow is ready to use.
 
-If you're comfortable with JSON:
+## Node Configuration
 
-1. Open `workflow.json` in a text editor
-2. Find all instances of:
-   ```json
-   "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi"
-   ```
-3. Replace with:
-   ```json
-   "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini"
-   ```
-4. Find all instances of:
-   ```json
-   "model": "gpt-4o-mini"
-   ```
-5. Replace with:
-   ```json
-   "model": "gemini-1.5-flash"
-   ```
-6. Update credentials references from `openAiApi` to `googleGeminiApi`
-7. Save and import
+### What's Pre-Configured
 
-### Option 3: Use Both (Recommended for Learning)
+All LLM nodes in the workflows use:
 
-You can keep both providers configured:
-- Use OpenAI for some workflows
-- Use Gemini for others
-- Compare results!
-
-## Node Type Mapping
-
-| OpenAI Node | Gemini Equivalent |
-|-------------|-------------------|
-| `lmChatOpenAi` | `lmChatGoogleGemini` |
-| Credential: `openAiApi` | Credential: `googleGeminiApi` |
-| Model: `gpt-4o-mini` | Model: `gemini-1.5-flash` |
-| Model: `gpt-4o` | Model: `gemini-1.5-pro` |
-
-## What Needs to Change?
-
-### ✅ Works Without Changes
-- Webhook triggers
-- Data transformation nodes
-- HTTP request nodes
-- Code nodes
-- Logic nodes (IF, Switch, etc.)
-- Memory/Redis nodes
-
-### ⚠️ Needs Credential Update
-- All LLM/Chat Model nodes
-- Any AI agent nodes
-
-### 📝 May Need Adjustment
-- Function calling format (minor differences)
-- Response parsing (field names might differ)
-- Token limits (Gemini has different limits)
-
-## Example Conversion
-
-### Before (OpenAI):
 ```json
 {
-  "parameters": {
-    "model": "gpt-4o-mini",
-    "options": {
-      "temperature": 0.7
-    },
-    "systemMessage": "You are a helpful assistant"
-  },
-  "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-  "credentials": {
-    "openAiApi": {
-      "id": "openai-credentials",
-      "name": "OpenAI API"
-    }
-  }
-}
-```
-
-### After (Gemini):
-```json
-{
+  "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
   "parameters": {
     "model": "gemini-1.5-flash",
     "options": {
       "temperature": 0.7
-    },
-    "systemMessage": "You are a helpful assistant"
+    }
   },
-  "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
   "credentials": {
     "googleGeminiApi": {
       "id": "gemini-credentials",
@@ -128,75 +48,135 @@ You can keep both providers configured:
 }
 ```
 
-## Will Everything Run Smoothly?
+### Model Selection
 
-### ✅ Yes, if you:
-1. Update the LLM nodes after import
-2. Configure Gemini credentials properly
-3. Use compatible models (`gemini-1.5-flash` or `gemini-1.5-pro`)
-4. Respect rate limits (15 RPM on free tier)
+| Tutorial | Pre-Set Model | Reason |
+|----------|--------------|---------|
+| 01-basic-agent | `gemini-1.5-flash` | Fast for learning |
+| 02-api-integration | `gemini-1.5-flash` | Good for tools |
+| 03-memory-agent | `gemini-1.5-flash` | Handles context |
+| 04-mcp-agent | `gemini-1.5-flash` | MCP compatible |
+| 05-orchestration | `gemini-1.5-pro` | Multi-agent reasoning |
 
-### ⚠️ Potential Issues:
+## What Works Out of the Box
 
-**Issue: "Could not find credential type"**
-- Solution: Make sure n8n has Google Gemini integration installed
-- Update n8n to latest version if needed
+### ✅ Ready to Use (No Changes)
 
-**Issue: Rate limit errors**
-- Solution: Add delays between requests (see [gemini-guide.md](gemini-guide.md))
+- All webhook triggers
+- All data transformation nodes
+- All HTTP request nodes
+- All code nodes
+- All LLM nodes (Gemini pre-configured!)
+- Memory and Redis integration
+- Function calling / tool use
+- Multi-agent orchestration
 
-**Issue: Function calling format differences**
-- Solution: Check response structure, adjust parsing if needed
+### 🔧 Only Requires Credential
 
-**Issue: Different response fields**
-- Solution: Gemini might use `text` instead of `message` - adjust accordingly
+- Google Gemini Chat Model nodes → Add your Gemini API credential
 
-## Testing Your Setup
+## Comparison with Other LLM Providers
 
-### Quick Test Workflow
+### Gemini (Pre-Configured) vs Others
 
-After updating to Gemini, test with:
+| Feature | Google Gemini ✅ | Alternative |
+|---------|-----------------|-------------|
+| Setup | Pre-configured | Manual node swap needed |
+| Cost | FREE tier | Paid |
+| Credit Card | Not required | Required |
+| Models Available | gemini-1.5-flash, pro | Various |
+| Rate Limits (Free) | 1,500 req/day | N/A |
 
-```bash
-curl -X POST http://localhost:5678/webhook-test/basic-agent \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello! Are you using Gemini?"}'
+## Advanced: Using Other LLM Providers
+
+If you want to use a different LLM provider (not recommended for beginners):
+
+### Steps to Switch
+
+1. **Import the workflow**
+2. **Delete** the Google Gemini Chat Model node
+3. **Add** your preferred LLM node:
+   - OpenAI Chat Model
+   - Anthropic Claude
+   - Azure OpenAI
+   - Ollama (local)
+4. **Configure** model settings
+5. **Connect** the same way
+6. **Add credential** for your provider
+
+### Example: Switching to OpenAI
+
+Before (Gemini - default):
+```json
+{
+  "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+  "parameters": {
+    "model": "gemini-1.5-flash"
+  },
+  "credentials": {
+    "googleGeminiApi": {}
+  }
+}
 ```
 
-Expected: You should get a response from the Gemini model.
+After (OpenAI):
+```json
+{
+  "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+  "parameters": {
+    "model": "gpt-4o-mini"
+  },
+  "credentials": {
+    "openAiApi": {}
+  }
+}
+```
 
-### Debugging Tips
+## Troubleshooting
 
-1. **Check node connections**
-   - Ensure all nodes are connected properly
+### "Can't find credential dropdown"
 
-2. **Review execution log**
-   - Look for errors in the workflow execution
+**Solution:**
+1. Make sure you created a Google Gemini API credential first
+2. Settings → Credentials → Add Credential → Search "Gemini"
 
-3. **Test credentials**
-   - Go to Settings → Credentials
-   - Click "Test" on your Gemini credential
+### "Node has red warning"
 
-4. **Check model name**
-   - Verify you're using `gemini-1.5-flash` or `gemini-1.5-pro`
+**Expected!** This means you need to select your credential:
+1. Click the node
+2. Select your credential from dropdown
+3. Warning disappears!
 
-5. **Inspect API calls**
-   - Use the execution viewer to see requests/responses
+### "Want to use a different model"
 
-## Future Updates
+**Solution:**
+1. Click the Google Gemini Chat Model node
+2. Change "Model" field to:
+   - `gemini-1.5-flash` (fast, free)
+   - `gemini-1.5-pro` (powerful, free)
+   - `gemini-pro` (balanced, free)
 
-We're working on providing **dual workflow files**:
-- `workflow-openai.json` - Pre-configured for OpenAI
-- `workflow-gemini.json` - Pre-configured for Gemini
+### "Workflow not working"
 
-For now, the manual update process takes < 1 minute per workflow.
+**Checklist:**
+1. ✅ Gemini API credential added?
+2. ✅ Credential selected in LLM nodes?
+3. ✅ API key valid? (test at Google AI Studio)
+4. ✅ Within rate limits? (15 req/min)
+5. ✅ n8n up to date? (supports Gemini nodes)
 
 ## Need Help?
 
-- See [gemini-guide.md](gemini-guide.md) for detailed Gemini setup
-- Check [troubleshooting.md](troubleshooting.md) for common issues
-- Visit [n8n Community](https://community.n8n.io/) for support
+- [Gemini Setup Guide](gemini-guide.md) - Detailed Gemini instructions
+- [Troubleshooting](troubleshooting.md) - Common issues and fixes
+- [n8n Community](https://community.n8n.io/) - Community support
 
----
+## Summary
 
-**Summary:** The workflows will run smoothly with Gemini after updating the LLM nodes. It's a simple node replacement that takes less than a minute! 🚀
+🎉 **All workflows are Gemini-ready!**
+
+1. Import workflow
+2. Add Gemini credential
+3. Execute!
+
+No node swapping, no JSON editing, no complications. Just import and go!

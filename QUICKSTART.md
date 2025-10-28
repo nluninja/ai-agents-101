@@ -7,7 +7,7 @@ Get up and running with n8n AI agents in 10 minutes!
 - Node.js 18+ installed
 - **LLM API Key** - Choose one:
   - **Google Gemini API** (FREE!) - [Get key here](https://aistudio.google.com/app/apikey)
-  - **OpenAI API** (Paid) - [Get key here](https://platform.openai.com/api-keys)
+  - **Gemini API** (Paid) - [Get key here](https://platform.gemini.com/api-keys)
 
 > **💰 Save Money!** Google Gemini offers a generous **FREE tier** - perfect for learning!
 
@@ -36,13 +36,13 @@ n8n will start at http://localhost:5678
 6. Paste your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
 7. Click **Save**
 
-### Option B: OpenAI (Paid)
+### Option B: Gemini (Paid)
 
 1. Open http://localhost:5678
 2. Create your account (local only)
 3. Go to **Settings** → **Credentials**
 4. Click **Add Credential**
-5. Select **OpenAI API**
+5. Select **Gemini API**
 6. Paste your API key
 7. Click **Save**
 
@@ -197,7 +197,7 @@ Check [docs/](docs/) for deeper understanding of concepts.
 ### Community & Resources
 - [n8n Community Forum](https://community.n8n.io/)
 - [n8n Documentation](https://docs.n8n.io/)
-- [OpenAI Documentation](https://platform.openai.com/docs)
+- [Gemini Documentation](https://platform.gemini.com/docs)
 
 ### Troubleshooting
 1. Check [docs/troubleshooting.md](docs/troubleshooting.md)
@@ -209,8 +209,8 @@ Check [docs/](docs/) for deeper understanding of concepts.
 
 ### Save API Costs
 ```javascript
-// Use gpt-4o-mini instead of gpt-4 for testing
-model: "gpt-4o-mini"  // Much cheaper!
+// Use gemini-1.5-flash instead of gpt-4 for testing
+model: "gemini-1.5-flash"  // Much cheaper!
 ```
 
 ### Speed Up Development
@@ -231,7 +231,7 @@ Provide context:
 ```
 
 ### Monitor Usage
-- Check OpenAI dashboard for API usage
+- Check Gemini dashboard for API usage
 - Set up billing alerts
 - Use rate limiting in production
 
